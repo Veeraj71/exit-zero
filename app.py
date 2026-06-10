@@ -3,7 +3,6 @@ import random
 
 app = Flask(__name__)
 
-# A pool of fun DevOps/Linux troubleshooting scenarios
 scenarios = [
     {
         "id": 1,
@@ -43,7 +42,6 @@ def home():
 
 @app.route('/api/quiz', methods=['GET'])
 def get_quiz():
-    # Pick a random scenario but hide the answers from the payload
     quiz_item = random.choice(scenarios)
     return jsonify({
         "id": quiz_item["id"],
@@ -57,14 +55,16 @@ def submit_answer():
     scen_id = data.get("id")
     user_command = data.get("command", "").lower().strip()
 
-    # Find the matching scenario
     scen = next((s for s in scenarios if s["id"] == scen_id), None)
     if not scen:
         return jsonify({"error": "Scenario not found"}), 404
 
-    # Check if any accepted keyword is in the user's input command
     correct = any(keyword in user_command for keyword in scen["accepted_commands"])
 
     if correct:
         return jsonify({"correct": True, "message": "System restored! Excellent troubleshooting."})
     return jsonify({"correct": False, "message": "Command failed or didn't resolve the issue. Try again!"})
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
