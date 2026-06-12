@@ -68,3 +68,9 @@ def submit_answer():
     if correct:
         return jsonify({"correct": True, "message": "System restored! Excellent troubleshooting."})
     return jsonify({"correct": False, "message": "Command failed or didn't resolve the issue. Try again!"})
+
+if __name__ == '__main__':
+    import os
+    # Render dynamic port pass karega, local par automatic 5000 use hoga
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
